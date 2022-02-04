@@ -39,22 +39,19 @@ User.findById = (id, result) => {
 User.getAll = (title,next_cursor,limit, result) => {
   let cursorId;
   if (next_cursor) {
-    try {
-      let decodedCursor = Base64.decode(next_cursor);
-console.log("decodedCursor",decodedCursor);
-      cursorId = decodedCursor.split(':')[1];
-      console.log("cursorId",cursorId);
-    } catch {
-      console.log("Errrrororororoororor");
-      throw new Error('Invalid cursor');
-    }}
+  
+      cursorId = Base64.decode(next_cursor);
+      }
+      
   limit=+(limit || 50) + 1;
   console.log("limitinmodel",limit);
   
   let query = `SELECT * FROM users ORDER BY userid DESC LIMIT ${limit}`;
   if (cursorId) {
-    console.log("next_cursor being used");
    query = `SELECT * FROM users WHERE userid <= ${cursorId} ORDER BY userid DESC LIMIT ${limit}`;
+  }else{
+    console.log("undefined");
+
   }
   if (title) {
     query += ` WHERE name LIKE '%${title}%'`;

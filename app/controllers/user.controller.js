@@ -52,7 +52,7 @@ let islimit=(typeof limit == 'undefined' && limit == null)?data.length-1:limit;
   if (data.length > islimit) {
     const lastEle = data.pop();
 
-    nextCursor = Base64.encode(`person:${lastEle.userid}`);
+    nextCursor = Base64.encode(`${lastEle.userid}`);
     // nextCursor = lastEle.userid;
   }
       res.status(200).json({

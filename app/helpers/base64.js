@@ -1,11 +1,13 @@
-function decode(str){
-    const plain = Buffer.from(str, 'base64').toString('utf8') ;
-    return plain;
+const Hashids = require('hashids/cjs')
+const hashids = new Hashids();
+function decode(id){
+    const plain = hashids.decode(id);
+        return plain;
   };
   
-  function encode(str){
-    const encoded = Buffer.from(str, 'utf8').toString('base64') ;
-    return encoded;
+  function encode(id){
+    const encoded = hashids.encode(id);
+     return encoded;
   };
   module.exports = {
     decode,encode
