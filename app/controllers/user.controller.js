@@ -58,10 +58,11 @@ let islimit=(typeof limit == 'undefined' && limit == null)?data.length-1:limit;
       res.status(200).json({
       status: "success",
       msg: "Sucesfully user list fetched",
-      limit:+limit,
+      limit:islimit,
       length: data?.length,
       data: data,
-      next_cursor: nextCursor
+      next_cursor: nextCursor,
+      next_cursor_url: (req.baseUrl + req.path).replace(/\/$/, "")+"?limit="+islimit+"&next_cursor="+nextCursor
     })};
   });
 };
