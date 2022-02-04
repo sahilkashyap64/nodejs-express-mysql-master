@@ -1,5 +1,5 @@
 const Hashids = require('hashids/cjs')
-const hashids = new Hashids();
+const hashids = new Hashids("Mysecret");
 function decode(id){
     const plain = hashids.decode(id);
         return plain;
