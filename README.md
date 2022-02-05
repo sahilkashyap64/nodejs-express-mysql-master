@@ -52,7 +52,7 @@ helpers- contain helper function to deal with api error response and hashing ids
 
 ---
 ## Routes
-
+### Postman Doc: [Link](https://documenter.getpostman.com/view/6553325/UVeGr6B7)
 ### All routes are using cursor based pagination 
 
 * Users List 
