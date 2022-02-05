@@ -157,4 +157,46 @@ let islimit=(typeof limit == 'undefined' && limit == null)?data.length-1:limit;
     })};
   });
 };
+exports.findAllFriendsofFriendByID = (req, res) => {
+  const id = req.params.id;
+  // const next_cursor = Base64.decode(req.query.next_cursor);
+  const next_cursor = req.query.next_cursor;
+  const limit = req.query.limit;
+
+  User.findFriendofFriendById(id,next_cursor, limit,(err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found User with id ${req.params.id}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving User with id " + req.params.id
+        });
+      }
+    }else { 
+       // Calculate next cursor
+  let nextCursor = '';
+  let nextcursorurl='';
+  console.log("nextCursor limit",limit);
+console.log("data.length > limit",data.length > limit);
+let islimit=(typeof limit == 'undefined' && limit == null)?data.length-1:limit;
+  if (data.length > islimit) {
+    const lastEle = data.pop();
+
+    nextCursor = Base64.encode(`${lastEle.userid}`);
+    // nextCursor = lastEle.userid;
+    nextcursorurl=(req.baseUrl + req.path).replace(/\/$/, "")+"?limit="+islimit+"&next_cursor="+nextCursor;
+  }
+      res.status(200).json({
+      status: "success",
+      msg: "Sucesfully user's friend of friend list fetched",
+      limit:islimit,
+      length: data?.length,
+      data: data,
+      next_cursor: nextCursor,
+      next_cursor_url: nextcursorurl
+    })};
+  });
+};
 
