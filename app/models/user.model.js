@@ -36,16 +36,35 @@ User.findById = (id, result) => {
   });
 };
 
-User.findFriendById = (id, result) => {
+User.findFriendById = (id,next_cursor,limit, result) => {
+  let cursorId;
+  if (next_cursor) {
   
-
-  sql.query(`SELECT B.userid,B.name "Friends Name"
+      cursorId = Base64.decode(next_cursor);
+      }
+      
+  limit=+(limit || 50) + 1;
+  console.log("limitinmodel",limit);
+  let query = `SELECT B.userid,B.name
   FROM
   (
       SELECT userid FROM friends WHERE friendid=${id}
       UNION
       SELECT friendid FROM friends WHERE userid=${id}
-  ) A INNER JOIN users B USING (userid)`, (err, res) => {
+  ) A INNER JOIN users B USING (userid) ORDER BY B.userid DESC LIMIT ${limit}`;
+  if (cursorId) {
+   query = `SELECT B.userid,B.name
+   FROM
+   (
+       SELECT userid FROM friends WHERE friendid=${id}
+       UNION
+       SELECT friendid FROM friends WHERE userid=${id}
+   ) A INNER JOIN users B USING (userid) WHERE B.userid <= ${cursorId} ORDER BY B.userid DESC LIMIT ${limit}`;
+  }else{
+    console.log("undefined");
+
+  }
+  sql.query(query, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
