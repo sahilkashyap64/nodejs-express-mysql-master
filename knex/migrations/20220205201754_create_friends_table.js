@@ -1,7 +1,8 @@
 exports.up = function(knex, Promise) {
     return knex.schema.createTable('friends', function(table) {
-        table.integer('userid').unsigned().nullable().references('userid').inTable('users');
-    table.integer('friendid').unsigned().nullable().references('userid').inTable('users');
+        table.integer('userid').unsigned().notNullable().references('userid').inTable('users').onDelete('cascade');
+        table.integer('friendid').unsigned().notNullable().references('userid').inTable('users').onDelete('cascade');
+    
      
       table.primary(['userid', 'friendid']);
       table.unique(['friendid', 'userid']);
