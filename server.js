@@ -1,6 +1,7 @@
 const express = require("express");
 // const bodyParser = require("body-parser"); /* deprecated */
 const cors = require("cors");
+const knex = require('./knex/knex.js');
 const userroutes=require("./app/routes/user.routes.js");
 const app = express();
 
@@ -21,8 +22,15 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to the application." });
 });
 
-
-
+async function assertDatabaseConnection() {
+  return knex.raw('select 1+1 as result')
+      .catch((err) => {
+          console.log('[Fatal]  Failed to establish connection to database! Exiting...');
+          console.log(err);
+          process.exit(1);
+      });
+}
+assertDatabaseConnection();
 userroutes(app);
 
 // set port, listen for requests
