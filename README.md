@@ -18,6 +18,7 @@ A backend application using Node.js with the Express framework, that implements 
 | cors | ^2.8.5 |for cors|
 | hashids | ^2.0.1 |encode & decode ids|
 | mysql | ^2.17.1 |to interact with Mysql |
+| knex | ^1.0.2 |DB migration and seed |
 
 ---
 
