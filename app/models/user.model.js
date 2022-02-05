@@ -91,7 +91,7 @@ User.findFriendofFriendById = (id,next_cursor,limit, result) => {
       
   limit=+(limit || 50) + 1;
   console.log("limitinmodel",limit);
-  let query = `select f1.friendid as friends_of_friends,u1.name
+  let query = `select f1.friendid as userid,u1.name
   from friends f1  JOIN users u1 
   ON f1.userid = u1.userid
   
@@ -109,7 +109,7 @@ User.findFriendofFriendById = (id,next_cursor,limit, result) => {
  
   and f1.friendid != ${id}  /* exclusion of myself. */ ORDER BY f1.friendid DESC LIMIT ${limit}`;
   if (cursorId) {
-   query = `select f1.friendid as friends_of_friends,u1.name
+   query = `select f1.friendid as userid,u1.name
    from friends f1  JOIN users u1 
    ON f1.userid = u1.userid
    
