@@ -65,6 +65,7 @@ url: "/api/users"
   <summary>Response Click to expand!</summary>
   
   ```json
+  //http://localhost:8080/api/users?limit=4
 {
     "status": "success",
     "msg": "Sucesfully user list fetched",
@@ -100,10 +101,64 @@ url: "/api/users"
 method: "GET"
 url: "/api/users/:id/friendlist"
 ```
+#### Response
+<details>
+  <summary>Response Click to expand!</summary>
+  
+```json
+//http://localhost:8080/api/users/1/friendlist?limit=50
+{
+    "status": "success",
+    "msg": "Sucesfully user's friend list fetched",
+    "limit": "50",
+    "length": 2,
+    "data": [
+        {
+            "userid": 3,
+            "name": "nepal"
+        },
+        {
+            "userid": 2,
+            "name": "bhutan"
+        }
+    ],
+    "next_cursor": "",
+    "next_cursor_url": ""
+}
+```
+</details>
+
 
 * Users Friend of friend List 
 ```sh
 method: "GET"
 url: "/api/users/:id/friendoffriend"
 ```
+#### Response
+<details>
+  <summary>Response Click to expand!</summary>
+  
+```json
+
+{
+    "status": "success",
+    "msg": "Sucesfully user's friend of friend list fetched",
+    "limit": "5",
+    "length": 2,
+    "data": [
+        {
+            "userid": 5,
+            "name": "russia"
+        },
+        {
+            "userid": 4,
+            "name": "pakistan"
+        }
+    ],
+    "next_cursor": "",
+    "next_cursor_url": ""
+}
+```
+
+</details>
 
