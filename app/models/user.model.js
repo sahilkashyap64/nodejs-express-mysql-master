@@ -63,6 +63,41 @@ User.findFriendById = (id, result) => {
   });
 };
 
+User.findFriendofFriendsbyid = (id, result) => {
+  
+
+  sql.query(`select f1.friendid as friends_of_friends
+  from friends f1
+  where f1.userid in (   /* retrieve my friend list */
+        select friendid as my_friends_userId
+        from friends f
+        where f.userid = ${id}
+          )
+  and f1.friendid not in (   /* exclusion of my own friends */
+        select friendid as my_friends_userId
+        from friends f
+        where f.userid = ${id}
+          
+   )
+ 
+  and f1.friendid != ${id}  /* exclusion of myself. */`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found user: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found User with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
 User.getAll = (title,next_cursor,limit, result) => {
   let cursorId;
   if (next_cursor) {

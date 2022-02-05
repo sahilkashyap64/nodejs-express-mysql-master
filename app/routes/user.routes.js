@@ -10,6 +10,7 @@ module.exports = app => {
   // Retrieve a single Tutorial with id
   router.get("/:id", users.findOne);
   router.get("/:id/friendlist", users.findFriendofUser);
+  router.get("/:id/friendoffriend", users.findFriendofFriendsofUser);
 
   app.use('/api/users', router);
 };
