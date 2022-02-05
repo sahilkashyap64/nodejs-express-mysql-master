@@ -5,9 +5,9 @@
 A backend application using Node.js with the Express framework, that implements a Shows friends details the Mysql.
 
               
-●User Listing.
-● User Friends Listing.
-● User Friends of Friend Listing.
+- User Listing.
+- User Friends Listing.
+- User Friends of Friend Listing.
 ---
 
 ## Stack
@@ -60,6 +60,40 @@ helpers- contain helper function to deal with api error response and hashing ids
 method: "GET"
 url: "/api/users"
 ```
+#### Response
+<details>
+  <summary>Response Click to expand!</summary>
+  
+  ```json
+{
+    "status": "success",
+    "msg": "Sucesfully user list fetched",
+    "limit": "4",
+    "length": 4,
+    "data": [
+        {
+            "userid": 5,
+            "name": "russia"
+        },
+        {
+            "userid": 4,
+            "name": "pakistan"
+        },
+        {
+            "userid": 3,
+            "name": "nepal"
+        },
+        {
+            "userid": 2,
+            "name": "bhutan"
+        }
+    ],
+    "next_cursor": "4YGeYxMW6J",
+    "next_cursor_url": "/api/users?limit=4&next_cursor=4YGeYxMW6J"
+}
+```
+</details>
+
 
 * Users Friend List 
 ```sh
