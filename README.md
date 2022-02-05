@@ -162,3 +162,37 @@ url: "/api/users/:id/friendoffriend"
 
 </details>
 
+
+
+### For simplicity sake we are going to assume countries and their allies
+### Dummy data 
+
+*In db this is mapped differently*
+
+|Id|Countries | Friends |
+|--| --- | ----------- |
+|1| India | Nepal,Bhutan |
+|2| bhutan | Russia,India |
+|3| nepal | Russia,Pakistan,India |
+|4| pakistan | Nepal |
+|5| russia | Nepal,Bhutan |
+
+#### Get friend list
+
+ - Hit **user id 1** and it should return this
+
+|Id|Countries | Friends |
+|--| --- | -----|
+|1| India | Nepal,Bhutan |
+
+#### Get Friends of friend
+
+- Hit **user id 1** and it should return this
+
+|Id|Countries | Friends |Friends of friend|
+|--| --- | -----|----|
+|1| India | Nepal,Bhutan |Pakistan,Russia|
+|2| Bhutan | Russia,India |Nepal|
+|3| Nepal | Russia,Pakistan,India ||
+|4| Pakistan | Nepal ||
+|5| Russia | Nepal,Bhutan |India,Pakistan|
