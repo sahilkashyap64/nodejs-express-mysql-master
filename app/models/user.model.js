@@ -18,7 +18,7 @@ const getPagingData = (data, page, limit) => {
 };
 
 User.findById = (id, result) => {
-  sql.query(`SELECT * FROM users WHERE id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM users WHERE userid = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -28,6 +28,33 @@ User.findById = (id, result) => {
     if (res.length) {
       console.log("found user: ", res[0]);
       result(null, res[0]);
+      return;
+    }
+
+    // not found User with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+User.findFriendById = (id, result) => {
+  
+
+  sql.query(`SELECT B.userid,B.name "Friends Name"
+  FROM
+  (
+      SELECT userid FROM friends WHERE friendid=${id}
+      UNION
+      SELECT friendid FROM friends WHERE userid=${id}
+  ) A INNER JOIN users B USING (userid)`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found user: ", res);
+      result(null, res);
       return;
     }
 
