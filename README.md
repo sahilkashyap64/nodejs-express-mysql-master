@@ -24,10 +24,12 @@ A backend application using Node.js with the Express framework, that implements 
 ## Running
 
 **After clone **
-
+- update db config
+```app/config/db.config.js```
 ```sh
-$ db migrate
 $ npm install
+$ knex migrate:latest   //users and friends migration
+$ knex seed:run   //seed the data
 ```
 
 **Starting the application**
