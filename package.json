@@ -4,9 +4,10 @@
   "description": "Node.js Restful CRUD API with Node.js, Express and MySQL",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate":"knex migrate:latest",
-    "seed":"knex seed:run"
+    "test": "mocha",
+    "migrate": "knex migrate:latest",
+    "seed-dev": "knex seed:run --specific=01_users.js && knex seed:run --specific=02_friends.js",
+    "seed-prod": "knex seed:run --specific=addUsers.js"
   },
   "keywords": [
     "nodejs",
@@ -22,5 +23,10 @@
     "hashids": "^2.0.1",
     "knex": "^1.0.2",
     "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.5",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.0"
   }
 }

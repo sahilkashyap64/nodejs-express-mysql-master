@@ -4,6 +4,7 @@ exports.seed = function(knex) {
   return knex('users').del()
     .then(function () {
       // Inserts seed entries
+      console.log("country inserted");
       return knex('users').insert([
         {userid:1,name: 'india'},
         {userid:2, name:'bhutan'},

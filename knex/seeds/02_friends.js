@@ -4,6 +4,8 @@ exports.seed = function(knex) {
   return knex('friends').del()
     .then(function () {
       // Inserts seed entries
+      knex('friends').truncate();
+ console.log("hello friendsSZ");
       return knex('friends').insert([
         {userid:1,friendid:2},
         {userid:1,friendid:3},
