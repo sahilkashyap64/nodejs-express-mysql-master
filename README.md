@@ -190,7 +190,11 @@ url: "/api/users/:id/friendoffriend"
 
 #### Get Friends of friend
 
-- Hit **user id 1** and it should return this
+- Hit **user id 1** and it should return *Pakistan,Russia*
+- Hit **user id 2** and it should return *Nepal*
+- Hit **user id 3** and it should return empty 
+- Hit **user id 4** and it should return empty 
+- Hit **user id 5** and it should return *India,Pakistan*
 
 |Id|Countries | Friends |Friends of friend|
 |--| --- | -----|----|
