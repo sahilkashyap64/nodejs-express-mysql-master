@@ -30,9 +30,12 @@ A backend application using Node.js with the Express framework, that implements 
 ```sh
 $ npm install
 $ npm run migrate   //users and friends migration
-$ npm run seed   //seed the data
+$ npm run seed-dev   //seed the dummy data eg country and allies
 ```
-
+*optional*
+```
+$ npm run seed-prod   //seed the random data using faker
+```
 **Starting the application**
 
 ```sh
