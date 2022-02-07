@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Site</title>
+  <style>.whole_wrapper {
+    background: rgba(0, 0, 0, .1);
+    width: 100%;
+    min-height: 100%;
+    padding:5%;
+  }
+  .whole_wrapper .each_card {
+    width: 50%;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    padding: 10px;
+    background: white;
+    margin:5% 25%;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+  .whole_wrapper .each_card .image_container {
+    text-align: left;
+  }
+  .whole_wrapper .each_card .image_container img {
+    width: 50%;
+    border-radius: 10px;
+  }
+  .whole_wrapper .each_card .right_contents_container {
+    display: flex;
+    flex-direction: column;
+  }
+  .whole_wrapper .each_card .right_contents_container .name_field {
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 30px;
+  }
+  .whole_wrapper .each_card .right_contents_container .email_field {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  
+  
+  .article-list__pagination {
+    background-color: #222;
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.25);
+    display: block;
+    bottom: 0;
+    left: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0.5em;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 0.2s;
+    z-index: 2;
+  }
+  
+  .article-list__pagination--inactive {
+    transform: translateY(100%);
+  }
+  
+  
+  .article-list__pagination__item {
+    display: inline-block;
+    margin: 0 1em;
+  }
+  .article-list__pagination__item a {
+    color: #888;
+    text-decoration: none;
+  }
+  .article-list__pagination__item a:hover, .article-list__pagination__item a:focus {
+    color: #aeaeae;
+  }
+  .article-list__pagination__item a:active {
+    color: #d5d5d5;
+  }
+  
+  
+  .article-list__page {
+    border-top: 1px solid #ddd;
+    clear: both;
+    counter-increment: page;
+    padding-bottom: 3em;
+    position: relative;
+  }
+  .article-list__page:before {
+    background-color: #ddd;
+    display: inline-block;
+    content: counter(page);
+    color: #888;
+    padding: 0.25em 0.5em;
+    position: absolute;
+    left: calc(50% - .75em);
+    top: -0.75em;
+    vertical-align: middle;
+    z-index: 1;
+  }
+  
+  </style>
+</head>
+<body>
+    <div id="app">
+      <p>Friends of friends</p>
+		<div class="whole_wrapper">
+
+		</div>
+	</div>
+
+	<ul class="article-list__pagination article-list__pagination--inactive" id="article-list-pagination"></ul>
+	
+    
+</body>
+</html>
+<script>
+  var myParam = location.search.split('user=')[1];
+    let page = 1;
+const last_page = 10;//max pages allowed
+var has_more=true;
+var next_cursor_urlfromapi;
+const articleListPagination = document.getElementById('article-list-pagination');
+const pixel_offset = 200;
+const throttle = (callBack, delay) => {
+  let withinInterval;
+  return function () {
+    const args = arguments;
+    const context = this;
+    if (!withinInterval) {
+      callBack.call(context, args);
+      withinInterval = true;
+      setTimeout(() => withinInterval = false, delay);
+    }
+  };
+};
+
+const httpRequestWrapper = (method, URL) => {
+  return new Promise((resolve, reject) => {
+    const xhr_obj = new XMLHttpRequest();
+    xhr_obj.responseType = "json";
+    xhr_obj.open(method, URL);
+    xhr_obj.onload = () => {
+      const data = xhr_obj.response;
+      resolve(data);
+    };
+    xhr_obj.onerror = () => {
+      reject("failed");
+    };
+    xhr_obj.send();
+  });
+};
+
+const getData = async (page_no = 1) => {
+  var url;
+  url=`http://localhost:8080${next_cursor_urlfromapi}`;
+  if(page_no==1){
+    console.log("myparam",myParam);
+    url=`http://localhost:8080/api/users/${myParam}/friendoffriend?limit=7`;}
+  const apidata = await httpRequestWrapper(
+  "GET",
+  url);
+
+console.log("api",apidata);
+  const { data,next_cursor,next_cursor_url } = apidata;
+  has_more=next_cursor;
+  next_cursor_urlfromapi=next_cursor_url
+
+  console.log("has_more",has_more);
+  populateUI(data);
+};
+
+let handleLoad;
+
+let trottleHandler = () => {throttle(handleLoad.call(this), 1000);};
+
+document.addEventListener("DOMContentLoaded", () => {
+  getData(1);
+  window.addEventListener("scroll", trottleHandler);
+});
+
+handleLoad = () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - pixel_offset) {
+    page = page + 1;
+    if (page <= last_page) {
+      window.removeEventListener('scroll', trottleHandler);
+      console.log("page",page);
+      if(has_more){getData(has_more).
+        then(res => {
+          window.addEventListener('scroll', trottleHandler);
+        });}else{
+          console.log("finished scroll");
+        }
+    }
+  }
+};
+
+
+
+
+
+
+
+const populateUI = data => {
+  const container = document.querySelector('.whole_wrapper');
+  const pageElement = document.createElement('div');
+  // pageElement.appendChild(getArticle());
+  console.log("data",data);
+  data &&
+  data.length &&
+  data.
+  map((each, index) => {
+    const { name, userid } = each;
+    
+    pageElement.innerHTML +=
+    `
+    <div class="each_card">
+        <div class="image_container">
+        <img src="https://robohash.org/${userid}" alt="" />
+      </div>
+      <div class="right_contents_container">
+        <div class="name_field">${userid}</div>
+        <div class="email_filed">${name}</div>
+        <div class="email_filed"><a href="http://localhost:8080/friends?user=${userid}">Friend</a></div>
+        <div class="email_filed"><a href="http://localhost:8080/fof?user=${userid}">Friend of friend</a></div>
+      </div>
+    </div>
+    
+    `;
+  });
+  pageElement.id = getPageId(page);
+  pageElement.className = 'article-list__page';
+	addPaginationPage(page);
+  container.appendChild(pageElement);
+
+};
+
+function getPageId(n) {
+	return 'article-page-' + n;
+}
+
+
+function addPaginationPage(page) {
+	const pageLink = document.createElement('a');
+	pageLink.href = '#' + getPageId(page);
+	pageLink.innerHTML = page;
+	
+	const listItem = document.createElement('li');
+	listItem.className = 'article-list__pagination__item';
+	listItem.appendChild(pageLink);
+	
+	articleListPagination.appendChild(listItem);
+	
+	if (page === 2) {
+		articleListPagination.classList.remove('article-list__pagination--inactive');
+	}
+}
+</script>
+<script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <!--<![endif]-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> <script >
+
+(function() {
+ 
+  $(".channel_id").select2({
+    placeholder: 'Channel...',
+    // width: '350px',
+    allowClear: true,
+    ajax: {
+        url:  'https://api.github.com/search/repositories',
+
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+            return {
+                term: params.term || '',
+                page: params.page || 1
+            }
+        },
+        cache: true
+    }
+});
+})();
+
+    </script>
