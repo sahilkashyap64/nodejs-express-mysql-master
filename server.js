@@ -4,9 +4,11 @@ const cors = require("cors");
 const knex = require('./knex/knex.js');
 const userroutes=require("./app/routes/user.routes.js");
 const app = express();
+const path = require('path');
 
 var corsOptions = {
-  origin: "http://127.0.0.1:5500"
+  // origin: "http://127.0.0.1:5500"
+  origin: "http://localhost:3000"
 };
 
 app.use(cors(corsOptions));
@@ -18,8 +20,16 @@ app.use(express.json()); /* bodyParser.json() is deprecated */
 app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
 
 // simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the application." });
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '/index.html'));
+});
+// simple route
+app.get('/friends', function(req, res) {
+  res.sendFile(path.join(__dirname, '/friends.html'));
+});
+// simple route
+app.get('/fof', function(req, res) {
+  res.sendFile(path.join(__dirname, '/friendofriend.html'));
 });
 
 async function assertDatabaseConnection() {
