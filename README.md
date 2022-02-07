@@ -206,3 +206,19 @@ url: "/api/users/:id/friendoffriend"
 |3| Nepal | Russia,Pakistan,India ||
 |4| Pakistan | Nepal ||
 |5| Russia | Nepal,Bhutan |India,Pakistan|
+
+- HTML UI added
+For user
+```ssh
+http://localhost:8080/
+```
+
+For user's friend
+```ssh
+http://localhost:8080/friends?user=3
+```
+
+For friends of friends
+```ssh
+http://localhost:8080/fof?user=5
+```
